@@ -3,7 +3,7 @@
 - Owner/session: macbook-codex-ui-release
 - Status: in_progress
 - Started: 2026-10-20T09:55:00+07:00
-- Updated: 2026-10-20T10:05:00+07:00
+- Updated: 2026-10-20T20:58:04+07:00
 - Base commit: 60ad43e
 - Branch/PR: main
 - Claims: index.html, tests/smoke.cjs, README.md, docs/work-log/2026-10-20-1005-macbook-ui-reliability.md
@@ -17,10 +17,15 @@ Review the static app, improve runtime reliability, local observation validation
 
 - 2026-10-20T10:05:00+07:00 — Work began before the collaboration workflow existed. Found its introduction during review; publishing this claim from a separate clean checkout before further edits. The completed collaboration setup task releases its files. Existing app changes preserved. Browser tools installed outside the repo; regression checks pending.
 
+- 2026-10-20T20:58:04+07:00 — Coordination checker claim acknowledged; no overlapping files. Completed runtime fixes and regression suite. Inspected desktop and phone screenshots. Ready to commit and push for Vercel Git deployment.
+
 ## Checks and results
 
 - Inline JavaScript syntax passes Node syntax check; embedded DB is byte-for-byte unchanged from the original base.
-- Browser regression checks and deployment verification pending.
+- PASS Chromium browser checks at 1440px and 390px: hidden views, name search, group/report filters, evidence links, dialog reset and keyboard focus, persisted local notes, escaped note content, JSON exports, malformed hash recovery and horizontal overflow.
+- PASS corrupted/blocked storage recovery, valid notes retained alongside invalid entries, safe source URL schemes, and session-only note export.
+- Inline DB unchanged from 1d31f41, Node syntax and git diff whitespace checks pass. No new venue facts or third-party content introduced. Browser dependencies and screenshots remain outside the repository.
+- Deployment verification pending.
 
 ## Handoff / next action
 
