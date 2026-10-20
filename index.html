@@ -34,12 +34,18 @@
 .mobile-rules{display:none}
 @media(max-width:680px){.mobile-rules{display:flex;align-items:center;gap:10px;margin-top:12px;color:var(--muted);font-size:12px}.mobile-rules select{min-width:0;flex:1;background:#0e1118;color:var(--text);border:1px solid #363d49;border-radius:8px;padding:9px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important}}
+.notebook{width:min(700px,calc(100% - 24px));max-height:90vh;padding:24px;border:1px solid #455061;border-radius:18px;background:var(--panel);color:var(--text)}
+.notebook::backdrop{background:rgba(2,5,10,.85);backdrop-filter:blur(6px)}
+.notebook h2{margin:0 0 6px;font-size:25px;letter-spacing:-.04em}.notebook p{font-size:12px;line-height:1.6;color:var(--muted)}
+.notebook-toolbar{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 12px}.notebook-summary{font-size:12px;color:var(--muted);margin:14px 0}
+.notebook-entry{padding:15px;margin:10px 0;border:1px solid var(--line);border-radius:12px;background:#0e1219;overflow-wrap:anywhere}.notebook-entry-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}.note-venue{padding:0;border:0;background:none;color:var(--mint);font-weight:850;text-align:left;font-size:14px}.note-remove{border:1px solid #424b59;background:#202633;color:#bbc5d3;border-radius:7px;padding:7px 10px;font-size:11px}.notebook-entry strong{display:block;margin-top:8px;font-size:13px}.notebook-entry p{white-space:pre-wrap;margin-bottom:0}.notebook-empty{padding:25px 10px;text-align:center}.import-preview{padding:14px;border:1px solid #477160;background:#13271f;border-radius:10px}.import-preview p{color:#c4dfd2;margin-top:0}.import-preview button{margin:4px 5px 0 0}.notebook-message{color:var(--mint);font-size:12px;line-height:1.6;overflow-wrap:anywhere}.notebook-storage{color:var(--amber)!important}.notebook button:disabled{opacity:.45;cursor:default}
+@media(max-width:680px){.nav{gap:8px}.navright{gap:6px}.navbtn{padding:8px}.export-word{display:none}.notebook{padding:17px}}
 </style>
 </head>
 <body>
 <header class="topbar"><div class="shell nav">
 <a class="brand" href="#top" aria-label="The Six homepage"><div class="brandlogo">S/6</div><div><div class="brandname">THE SIX<span style="color:var(--mint)">.</span></div><div class="brandmeta">UNOFFICIAL FIELD GUIDE</div></div></a>
-<div class="navright"><span class="smallpill">● Independent project</span><a class="navlink" href="#sources">Sources & notes</a><button class="navbtn" id="exportBtn" title="Export the original venue dataset and any observations saved on this browser">↓ Export data</button></div>
+<div class="navright"><span class="smallpill">● Independent project</span><a class="navlink" href="#sources">Sources & notes</a><button class="navbtn" id="notebookBtn">My notes</button><button class="navbtn" id="exportBtn" title="Export the original venue dataset and any observations saved on this browser">↓ Export<span class="export-word"> data</span></button></div>
 </div></header>
 <main class="shell" id="top">
 <section class="hero"><div class="hero-top"><div><div class="eyebrow"><span class="dot"></span>PATTAYA, THAILAND · SOI YODSAK</div><h1>KNOW THE <span>SIX.</span></h1><p class="subtitle">One street. A whole lot of bars. Find the names, see who's affiliated with whom, and check what visitors actually report about house rules. No bar sponsorship. No mystery maths.</p></div><div class="statdeck"><div class="statbox"><div class="statnum" id="barCount">98</div><div class="statcap">Bars listed</div></div><div class="statbox"><div class="statnum">4</div><div class="statcap">Bar groups</div></div><div class="statbox"><div class="statnum" id="reportsCount">4</div><div class="statcap">Venues with intel</div></div></div></section>
@@ -57,6 +63,13 @@
 </div></main>
 <footer class="footer" id="sources"><div class="shell footer-flex"><div><strong>THE SIX.</strong> Unofficial, independent, adult-oriented nightlife information.<br>No affiliation, endorsement or relationship with listed bars or groups. No booking or arrangement of services. Be respectful, seek consent, and verify all costs.</div><div>Starter street sequence: <a href="https://guestfriendlyhotels.asia/soi-6-bars-pattaya/" target="_blank" rel="noopener">June 2026 street guide</a><br>2026 sources: <a href="https://www.reddit.com/r/Pattaya/comments/1w8uqif/4th_trip_something_new_every_time/" target="_blank" rel="noopener">September visitor thread</a> · <a href="https://www.reddit.com/r/Pattaya/comments/1qo0qvg/minimum_lds_on_soi_6/" target="_blank" rel="noopener">January minimums discussion</a><br>Cross-checks: <a href="https://soi6.com/" target="_blank" rel="noopener">Soi6.com</a> · <a href="https://www.reddit.com/r/Pattaya/" target="_blank" rel="noopener">visitor discussions</a><br><span style="color:#7e8999">Prototype built October 2026. Data requires field verification.</span></div></div></footer>
 <div class="dialog-backdrop" id="reportDialog" hidden role="dialog" aria-modal="true" aria-labelledby="dialogTitle"><div class="dialog"><div class="dialog-top"><div><h2 id="dialogTitle">Add a field observation</h2><p id="dialogSubtitle">Give a dated, sourceable report. Nothing gets published automatically.</p></div><button class="close" id="closeDialog" aria-label="Close">✕</button></div><form id="reportForm"><input type="hidden" name="venue_id" id="reportVenueId"><div class="field"><label for="status">Upstairs / short-time drink minimum</label><select id="status" name="status" required><option value="unknown">I couldn't confirm</option><option value="none">Staff said no minimum</option><option value="min">Staff stated a minimum</option></select></div><div class="field" id="minValueField" style="display:none"><label for="minValue">Number of lady drinks</label><input id="minValue" name="min" type="number" min="1" max="30" placeholder="e.g. 5"><small>Only enter an exact number when it was actually stated.</small></div><div class="field"><label for="observedDate">Date observed</label><input type="date" id="observedDate" name="date" required></div><div class="field"><label for="reportNotes">What exactly were you told? (optional)</label><textarea id="reportNotes" name="notes" maxlength="500" placeholder="e.g. Asked mamasan before buying drinks. She said 5 lady drinks for the upstairs room, but the rule may vary."></textarea><small>No names, images or identifying details of staff or patrons.</small></div><div class="saved-note" id="savedNote">Saved only on this device. Export your data to send it for manual review. It is not published to a server.</div><div class="dialog-actions"><button class="cta secondary" type="button" id="cancelDialog">Cancel</button><button class="cta" type="submit">Save observation</button></div></form></div></div>
+<dialog class="notebook" id="notebookDialog" aria-labelledby="notebookTitle" aria-describedby="notebookPrivacy">
+<div class="dialog-top"><div><h2 id="notebookTitle">My field notes</h2><p id="notebookPrivacy">Private to this browser. Back up or restore your observations here. Notes are never uploaded or published.</p></div><button class="close" id="closeNotebook" aria-label="Close my notes" autofocus>✕</button></div>
+<div class="notebook-toolbar"><button class="cta" id="notebookExport">↓ Export backup</button><button class="cta secondary" id="chooseImport">Restore backup</button><button class="cta secondary" id="undoNote" hidden>Undo removal</button><input type="file" id="importFile" accept=".json,application/json" hidden></div>
+<p class="notebook-storage" id="notebookStorage" hidden>Browser storage is unavailable. Notes and changes last for this session only. Export a backup before leaving.</p>
+<div class="import-preview" id="importPreview" hidden><p id="importSummary"></p><button class="cta" id="confirmImport">Import notes</button><button class="cta secondary" id="cancelImport">Cancel</button></div>
+<p class="notebook-message" id="notebookMessage" role="status"></p><div class="notebook-summary" id="notebookSummary"></div><div id="notebookEntries"></div>
+</dialog>
 <div class="toast" id="toast" role="status"></div>
 <script>
 /* Data inserted during packaging. Avoid fetch() to keep file:// previews functional. */
@@ -71,11 +84,12 @@ if(typeof record.date!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(record.date))retur
 const date=new Date(record.date+'T12:00:00Z');
 return !Number.isNaN(date.getTime())&&date.toISOString().slice(0,10)===record.date&&(record.notes==null||typeof record.notes==='string');
 }
+let storageSessionOnly=false;
 function loadObservations(){
 try{const saved=JSON.parse(localStorage.getItem(storeKey)||'{}');
 if(!saved||typeof saved!=='object'||Array.isArray(saved))return {};
 return Object.fromEntries(VENUES.filter(v=>Array.isArray(saved[v.id])).map(v=>[v.id,saved[v.id].filter(validObservation)]));
-}catch(err){return {}}
+}catch(err){storageSessionOnly=true;return {}}
 }
 let observations=loadObservations();
 const state={group:'all',rules:'all',search:'',view:'street',selected:null};
@@ -84,7 +98,7 @@ const html=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'
 const safeURL=value=>{try{const url=new URL(value);return ['https:','http:'].includes(url.protocol)?html(url.href):'#'}catch(err){return '#'}};
 const groupName=g=>GROUPS[g]?.name||'Unconfirmed';
 const findVenue=id=>VENUES.find(v=>v.id===id);
-function effectiveRule(v){const local=(observations[v.id]||[]).at(-1);if(!local)return {status:v.rule_status,min:v.st_min,label:v.st_label,date:v.rule_date,note:v.rule_note,source:v.rule_source,local:false};return {status:'local',min:local.status==='min'?Number(local.min):local.status==='none'?0:null,label:local.status==='min'?`${local.min} drinks (your note)`:local.status==='none'?'No minimum (your note)':'Not confirmed',date:local.date,note:local.notes||'This observation is stored on your device only and has not been moderated.',source:null,local:true}}
+function effectiveRule(v){const local=latestObservation(v.id);if(!local)return {status:v.rule_status,min:v.st_min,label:v.st_label,date:v.rule_date,note:v.rule_note,source:v.rule_source,local:false};return {status:'local',min:local.status==='min'?Number(local.min):local.status==='none'?0:null,label:local.status==='min'?`${local.min} drinks (your note)`:local.status==='none'?'No minimum (your note)':'Not confirmed',date:local.date,note:local.notes||'This observation is stored on your device only and has not been moderated.',source:null,local:true}}
 function ruleType(v){const r=effectiveRule(v);if(r.min!==null)return r.min===0?'none':'min';if(!r.local && (v.rule_status!=='unknown'||(v.evidence||[]).length))return 'hint';return 'unknown'}
 function matches(v){if(state.group!=='all'&&v.group!==state.group)return false;if(state.rules!=='all'&&ruleType(v)!==state.rules)return false;const hay=[v.name,groupName(v.group),v.quirk,v.rule_note,v.offsite_note,DB.metadata.group_intel[v.group]?.headline,(v.evidence||[]).map(e=>e.headline).join(' ')].join(' ').toLowerCase();return hay.includes(state.search)}
 function renderGroups(){const totals={};for(const k of Object.keys(GROUPS))totals[k]=k==='all'?VENUES.length:VENUES.filter(v=>v.group===k).length;
@@ -105,8 +119,8 @@ function renderDetail(v){if(!v)return;const r=effectiveRule(v);const isUnconfirm
 const groupIntel=DB.metadata.group_intel[v.group];const evidence=(v.evidence||[]).slice().sort((a,b)=>b.published.localeCompare(a.published));const summaryLinks=groupIntel?groupIntel.sources.map((url,i)=>`<a href="${safeURL(url)}" target="_blank" rel="noopener">Group source ${i+1} ↗</a>`).join(' · '):'';
 const evidenceHtml=evidence.length?`<div class="detail-row"><div class="label">Source desk · ${evidence.length} dated case${evidence.length===1?'':'s'}</div><div class="evidence-list">${evidence.map(e=>`<div class="evidence-item"><div class="evidence-meta">${html(e.scope.toUpperCase())} · REPORTED ${html(e.published)} · ${html(e.kind)}</div><strong>${html(e.headline)}</strong><p>${html(e.detail)}</p><a href="${safeURL(e.source)}" target="_blank" rel="noopener noreferrer">Read visitor / guide source ↗</a></div>`).join('')}</div></div>`:'';
 const groupHtml=groupIntel?`<div class="detail-row"><div class="label">Group-level chatter · not a venue policy</div><div class="groupintel-text"><strong>${html(groupIntel.headline)}</strong><p>${html(groupIntel.detail)}</p><div class="evidence-links">${summaryLinks}</div></div></div>`:'';
-let detail=`<div class="detail-head"><button class="detail-close" id="closeDetail" title="Close this bar card" aria-label="Close bar details">×</button><div class="detail-heading">BAR FACT SHEET <span style="float:right;color:#718191">#${String(v.position+1).padStart(2,'0')}</span></div><div class="detail-name">${html(v.name)}</div><span class="group-tag"><span class="swatch ${v.group}"></span>${html(groupName(v.group))}</span></div><div class="detail-body"><div class="label">Upstairs / ST lady drinks</div><div class="rulevalue ${minClass}">${html(r.label)}</div><div class="rulemeta"><strong>${html(label)}</strong><br>${r.local?'Observed':'Report published'}: ${html(date)}</div><p class="rulemeta">${html(note)}</p>${r.source?`<p style="font-size:11px;margin:-8px 0 18px"><a href="${safeURL(r.source)}" target="_blank" rel="noopener">Read the source ↗</a></p>`:''}<div class="detail-row"><div class="label">Affiliation</div><div class="detail-value">${isUnconfirmed?'Ownership / operating group not established. Do not assume independent.':`Listed by outside guides as part of <strong>${html(groupName(v.group))}</strong>. Not independently audited.`}</div></div><div class="detail-row"><div class="label">Street location</div><div class="detail-value">${v.side==='left'?'Left':'Right'} side, walking from Beach Road towards Second Road. Approx. ${v.position+1} in side sequence.<br><span style="color:#798699">Illustrative location only.</span></div></div>${v.quirk?`<div class="detail-row"><div class="label">Other field notes</div><div class="detail-value">${html(v.quirk)}</div></div>`:''}${v.offsite_note?`<div class="detail-row"><div class="label">Off-site / LT report · separate</div><div class="detail-value">${html(v.offsite_note)}</div></div>`:''}${evidenceHtml}${groupHtml}${(observations[v.id]||[]).length?`<div class="detail-row"><div class="label">Notes saved on this device</div><div class="detail-value">${(observations[v.id]||[]).length} observation(s) · not publicly published.</div></div>`:''}<div class="detail-actions"><button class="cta" id="addObservation">+ Add a note</button><a class="cta secondary" href="${html(mapURL)}" target="_blank" rel="noopener" title="Search for the venue name on Google Maps; not an exact plotted pin">Find on Maps ↗</a></div><p class="disclaimer">No live policy feed. House rules, prices and staff decisions can differ at any visit.</p></div>`;
-el('detailsContent').innerHTML=detail;el('addObservation').onclick=()=>openDialog(v);el('closeDetail').onclick=()=>el('details').classList.remove('open');}
+let detail=`<div class="detail-head"><button class="detail-close" id="closeDetail" title="Close this bar card" aria-label="Close bar details">×</button><div class="detail-heading">BAR FACT SHEET <span style="float:right;color:#718191">#${String(v.position+1).padStart(2,'0')}</span></div><div class="detail-name">${html(v.name)}</div><span class="group-tag"><span class="swatch ${v.group}"></span>${html(groupName(v.group))}</span></div><div class="detail-body"><div class="label">Upstairs / ST lady drinks</div><div class="rulevalue ${minClass}">${html(r.label)}</div><div class="rulemeta"><strong>${html(label)}</strong><br>${r.local?'Observed':'Report published'}: ${html(date)}</div><p class="rulemeta">${html(note)}</p>${r.source?`<p style="font-size:11px;margin:-8px 0 18px"><a href="${safeURL(r.source)}" target="_blank" rel="noopener">Read the source ↗</a></p>`:''}<div class="detail-row"><div class="label">Affiliation</div><div class="detail-value">${isUnconfirmed?'Ownership / operating group not established. Do not assume independent.':`Listed by outside guides as part of <strong>${html(groupName(v.group))}</strong>. Not independently audited.`}</div></div><div class="detail-row"><div class="label">Street location</div><div class="detail-value">${v.side==='left'?'Left':'Right'} side, walking from Beach Road towards Second Road. Approx. ${v.position+1} in side sequence.<br><span style="color:#798699">Illustrative location only.</span></div></div>${v.quirk?`<div class="detail-row"><div class="label">Other field notes</div><div class="detail-value">${html(v.quirk)}</div></div>`:''}${v.offsite_note?`<div class="detail-row"><div class="label">Off-site / LT report · separate</div><div class="detail-value">${html(v.offsite_note)}</div></div>`:''}${evidenceHtml}${groupHtml}${(observations[v.id]||[]).length?`<div class="detail-row"><div class="label">Notes saved on this device</div><div class="detail-value">${(observations[v.id]||[]).length} observation(s) · not publicly published.<br><button class="note-venue" id="reviewNotes">Review in My notes ↗</button></div></div>`:''}<div class="detail-actions"><button class="cta" id="addObservation">+ Add a note</button><a class="cta secondary" href="${html(mapURL)}" target="_blank" rel="noopener" title="Search for the venue name on Google Maps; not an exact plotted pin">Find on Maps ↗</a></div><p class="disclaimer">No live policy feed. House rules, prices and staff decisions can differ at any visit.</p></div>`;
+el('detailsContent').innerHTML=detail;if(el('reviewNotes'))el('reviewNotes').onclick=openNotebook;el('addObservation').onclick=()=>openDialog(v);el('closeDetail').onclick=()=>el('details').classList.remove('open');}
 function selectVenue(id){state.selected=id;const v=findVenue(id);if(!v)return;location.hash='bar='+encodeURIComponent(id);renderMap();el('details').classList.add('open');}
 function changeView(view){state.view=view;el('streetView').hidden=view!=='street';el('listView').hidden=view!=='list';el('streetToggle').classList.toggle('active',view==='street');el('listToggle').classList.toggle('active',view==='list');el('streetToggle').setAttribute('aria-pressed',view==='street');el('listToggle').setAttribute('aria-pressed',view==='list')}
 let dialogReturnFocus=null;
@@ -127,13 +141,113 @@ document.querySelectorAll('header,main,footer').forEach(x=>x.inert=false);if(dia
 let toastTimer;function toast(message){clearTimeout(toastTimer);el('toast').textContent=message;el('toast').classList.add('show');toastTimer=setTimeout(()=>el('toast').classList.remove('show'),3000)}
 function exportData(){const body=JSON.stringify({metadata:DB.metadata,venues:VENUES,local_observations:observations,exported_at:new Date().toISOString()},null,2);const url=URL.createObjectURL(new Blob([body],{type:'application/json'}));const link=document.createElement('a');link.href=url;link.download='the-six-field-data.json';document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);toast('Exported dataset + your local observations')}
 function init(){renderGroups();renderIntel();renderMap();changeView('street');el('streetToggle').onclick=()=>changeView('street');el('listToggle').onclick=()=>changeView('list');el('search').oninput=e=>{state.search=e.target.value.toLowerCase().trim();if(state.search)changeView('list');renderMap()};const setRules=value=>{state.rules=value;el('mobileRules').value=value;document.querySelectorAll('input[name=rules]').forEach(r=>r.checked=r.value===value);renderMap()};document.querySelectorAll('input[name=rules]').forEach(r=>r.onchange=()=>setRules(r.value));el('mobileRules').onchange=e=>setRules(e.target.value);el('exportBtn').onclick=exportData;el('closeDialog').onclick=closeDialog;el('cancelDialog').onclick=closeDialog;el('reportDialog').onclick=e=>{if(e.target===el('reportDialog'))closeDialog()};el('status').onchange=e=>{el('minValueField').style.display=e.target.value==='min'?'block':'none';el('minValue').required=e.target.value==='min'};
-el('reportForm').onsubmit=e=>{e.preventDefault();const id=el('reportVenueId').value;const status=el('status').value;const min=status==='min'?Number(el('minValue').value):null;if(!findVenue(id)){toast('Choose a venue before saving');return;}if(status==='min'&&(!Number.isInteger(min)||min<1||min>30)){toast('Enter a valid drink number');return;}const record={status,min,date:el('observedDate').value,notes:el('reportNotes').value.trim(),saved_at:new Date().toISOString()};if(!validObservation(record)||record.date>bangkokToday()){toast('Enter a valid observation date, today or earlier');return;}(observations[id]??=[]).push(record);try{localStorage.setItem(storeKey,JSON.stringify(observations));el('savedNote').textContent='Saved only on this device. Export your data to send it for manual review. It is not published to a server.';toast('Saved locally. Export to share for review.')}catch(err){el('savedNote').textContent='Browser storage is blocked. This observation is held for this session only. Export now to keep it.';toast('Saved for this session only. Export to keep it.')}el('savedNote').classList.add('on');renderMap();dialogCloseTimer=setTimeout(closeDialog,1400)};
-document.addEventListener('keydown',e=>{if(!el('reportDialog').hidden){
+el('reportForm').onsubmit=e=>{e.preventDefault();const id=el('reportVenueId').value;const status=el('status').value;const min=status==='min'?Number(el('minValue').value):null;if(!findVenue(id)){toast('Choose a venue before saving');return;}if(status==='min'&&(!Number.isInteger(min)||min<1||min>30)){toast('Enter a valid drink number');return;}const record={status,min,date:el('observedDate').value,notes:el('reportNotes').value.trim(),saved_at:new Date().toISOString()};if(!validObservation(record)||record.date>bangkokToday()){toast('Enter a valid observation date, today or earlier');return;}(observations[id]??=[]).push(record);if(persistObservations()){el('savedNote').textContent='Saved only on this device. Export your data to send it for manual review. It is not published to a server.';toast('Saved locally. Export to share for review.')}else{el('savedNote').textContent='Browser storage is blocked. This observation is held for this session only. Export now to keep it.';toast('Saved for this session only. Export to keep it.')}el('savedNote').classList.add('on');renderMap();dialogCloseTimer=setTimeout(closeDialog,1400)};
+document.addEventListener('keydown',e=>{if(el('notebookDialog').open){trapDialogFocus(el('notebookDialog'),e);return;}if(!el('reportDialog').hidden){
 if(e.key==='Escape'){e.preventDefault();closeDialog();return;}
-if(e.key==='Tab'){const controls=[...el('reportDialog').querySelectorAll('button,input,select,textarea,a[href]')].filter(x=>!x.disabled&&x.getClientRects().length);const first=controls[0],last=controls.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}
+trapDialogFocus(el('reportDialog'),e);
 return;
 }if(e.key==='Escape'){el('details').classList.remove('open')}if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();el('search').focus()}});window.addEventListener('hashchange',handleHash);handleHash()}
 function handleHash(){if(!location.hash.startsWith('#bar='))return;let id;try{id=decodeURIComponent(location.hash.slice(5))}catch(err){return;}if(location.hash.startsWith('#bar=')&&findVenue(id)&&state.selected!==id){state.selected=id;renderMap();el('details').classList.add('open')}}
+// Device-only notebook. Import only observation fields, never the published DB.
+let pendingImport=null;
+let removedNote=null;
+let importReadVersion=0;
+const counted=(count,noun)=>`${count} ${noun}${count===1?'':'s'}`;
+const observationLabel=r=>r.status==='min'?`${r.min} drinks (your note)`:r.status==='none'?'No minimum (your note)':'Not confirmed (your note)';
+const observationKey=r=>JSON.stringify([r.status,r.status==='min'?r.min:null,r.date,r.notes||'']);
+function latestObservation(id){
+return (observations[id]||[]).reduce((latest,r)=>!latest||r.date>=latest.date?r:latest,null);
+}
+function persistObservations(){
+try{localStorage.setItem(storeKey,JSON.stringify(observations));storageSessionOnly=false;return true}
+catch(err){storageSessionOnly=true;return false}
+}
+function trapDialogFocus(dialog,event){
+if(event.key!=='Tab')return;
+const controls=[...dialog.querySelectorAll('button,input,select,textarea,a[href]')].filter(x=>!x.disabled&&x.getClientRects().length);
+const first=controls[0],last=controls.at(-1);
+if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus()}
+else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus()}
+}
+function notebookMessage(message){el('notebookMessage').textContent=message}
+function renderNotebook(){
+const entries=VENUES.flatMap(v=>(observations[v.id]||[]).map((r,index)=>({v,r,index})));
+entries.sort((a,b)=>b.r.date.localeCompare(a.r.date)||a.v.name.localeCompare(b.v.name)||b.index-a.index);
+el('notebookSummary').textContent=`${counted(entries.length,'note')} across ${counted(new Set(entries.map(x=>x.v.id)).size,'venue')}`;
+el('notebookStorage').hidden=!storageSessionOnly;
+el('undoNote').hidden=!removedNote;
+el('notebookEntries').innerHTML=entries.map(({v,r,index})=>`<article class="notebook-entry"><div class="notebook-entry-top"><button class="note-venue" data-note-venue="${html(v.id)}">${html(v.name)} ↗</button><button class="note-remove" data-remove-venue="${html(v.id)}" data-remove-index="${index}" aria-label="Remove note for ${html(v.name)} observed ${html(r.date)}">Remove</button></div><div class="evidence-meta">OBSERVED ${html(r.date)} · PRIVATE NOTE</div><strong>${html(observationLabel(r))}</strong>${r.notes?`<p>${html(r.notes)}</p>`:''}</article>`).join('')||'<div class="notebook-empty"><strong>Your field notebook starts here.</strong><p>Open a venue and choose “Add a note” to record a dated observation. You can also restore notes from a previously exported backup.</p></div>';
+el('notebookEntries').querySelectorAll('[data-note-venue]').forEach(b=>b.onclick=()=>{el('notebookDialog').close();selectVenue(b.dataset.noteVenue);el('addObservation').focus()});
+el('notebookEntries').querySelectorAll('[data-remove-venue]').forEach(b=>b.onclick=()=>{
+const id=b.dataset.removeVenue,index=Number(b.dataset.removeIndex);
+removedNote={id,index,record:observations[id][index]};observations[id].splice(index,1);
+const stored=persistObservations();renderMap();renderNotebook();
+notebookMessage(stored?'Note removed. Undo is available.':'Note removed for this session. Browser storage is unavailable; export to keep your changes.');el('undoNote').focus();
+});
+}
+function openNotebook(){
+renderNotebook();notebookMessage('');el('notebookDialog').showModal();
+}
+function cancelImport(){
+importReadVersion++;pendingImport=null;el('importPreview').hidden=true;el('importFile').value='';
+}
+function previewImport(value){
+if(!value||typeof value!=='object'||Array.isArray(value)||!value.local_observations||typeof value.local_observations!=='object'||Array.isArray(value.local_observations))throw new Error('Choose a THE SIX export containing local_observations.');
+const incoming={};let skipped=0,total=0;
+for(const [id,records] of Object.entries(value.local_observations)){
+if(!Array.isArray(records)){skipped++;continue}
+total+=records.length;if(total>2000)throw new Error('This backup contains too many notes. Use a backup with at most 2,000 notes.');
+if(!findVenue(id)){skipped+=records.length;continue}
+for(const r of records){
+if(!validObservation(r)||r.date>bangkokToday()||(r.notes||'').length>500){skipped++;continue}
+const record={status:r.status,min:r.status==='min'?r.min:null,date:r.date,notes:r.notes||''};
+if(typeof r.saved_at==='string'&&!Number.isNaN(Date.parse(r.saved_at)))record.saved_at=new Date(r.saved_at).toISOString();
+(incoming[id]??=[]).push(record);
+}
+}
+return {incoming,skipped};
+}
+function mergePreview(incoming){
+const additions={};let duplicates=0,count=0;
+for(const [id,records] of Object.entries(incoming)){
+const known=new Set((observations[id]||[]).map(observationKey));
+for(const r of records){const key=observationKey(r);if(known.has(key)){duplicates++;continue}known.add(key);(additions[id]??=[]).push(r);count++}
+}
+return {additions,duplicates,count};
+}
+async function readBackup(file){
+cancelImport();notebookMessage('');if(!file)return;
+const version=importReadVersion;
+try{
+if(file.size>2*1024*1024)throw new Error('Choose a JSON backup smaller than 2 MB.');
+const value=JSON.parse(await file.text());if(version!==importReadVersion)return;
+pendingImport=previewImport(value);const preview=mergePreview(pendingImport.incoming);
+el('importSummary').textContent=`${preview.count} new ${preview.count===1?'note':'notes'}, ${counted(preview.duplicates,'duplicate')}, ${pendingImport.skipped} skipped (invalid or unknown venue). Existing notes are kept. Venue data is never imported.`;
+el('confirmImport').disabled=preview.count===0;el('importPreview').hidden=false;el('cancelImport').focus();
+}catch(err){if(version===importReadVersion){pendingImport=null;notebookMessage(err instanceof SyntaxError?'This file is not valid JSON. Choose a THE SIX export.':err.message)}}
+}
+function applyImport(){
+if(!pendingImport)return;
+const {additions,count}=mergePreview(pendingImport.incoming);
+for(const [id,records] of Object.entries(additions)){
+// Existing notes win ties on observation date; an old backup cannot displace them.
+observations[id]=[...records,...(observations[id]||[])];
+}
+const stored=persistObservations();cancelImport();renderMap();renderNotebook();
+notebookMessage(`${counted(count,'note')} imported. ${stored?'Saved on this device only.':'Available for this session only; export now to keep them.'}`);el('notebookExport').focus();
+}
+function initNotebook(){
+el('notebookBtn').onclick=openNotebook;el('closeNotebook').onclick=()=>el('notebookDialog').close();
+el('notebookDialog').addEventListener('close',()=>{cancelImport();if(document.activeElement===document.body)el('notebookBtn').focus()});
+el('notebookExport').onclick=exportData;el('chooseImport').onclick=()=>el('importFile').click();
+el('importFile').onchange=e=>readBackup(e.target.files[0]);el('cancelImport').onclick=()=>{cancelImport();el('chooseImport').focus()};el('confirmImport').onclick=applyImport;
+el('undoNote').onclick=()=>{
+if(!removedNote)return;const {id,index,record}=removedNote;removedNote=null;if(!(observations[id]||[]).some(r=>observationKey(r)===observationKey(record)))(observations[id]??=[]).splice(index,0,record);
+const stored=persistObservations();renderMap();renderNotebook();notebookMessage(stored?'Note restored.':'Note restored for this session; export to keep it.');el('notebookExport').focus();
+};
+}
+
 init();
+initNotebook();
 </script>
 </body></html>

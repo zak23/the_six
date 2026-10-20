@@ -37,8 +37,8 @@ The longer-term vision is an independently operated, installable progressive web
 | Venue details | Per-bar notes, selected reported minimums, sources and dated evidence timeline |
 | Research intelligence | **14 venues with 18 venue-specific evidence items** in the October 2026 snapshot |
 | Indicative street prices | Approximate historic ranges, clearly **not venue-specific quotes** |
-| Field observations | Add an observation for a venue; stored in your browser's `localStorage` |
-| Data export | Download an export of the embedded data and your device's observations as JSON |
+| Field observations | Add dated observations; review history in **My notes**, remove mistakes and undo the latest removal |
+| Backup and restore | Export JSON; preview and merge private notes from a backup, with duplicate protection |
 | GitHub → Vercel | Commits to `main` automatically deploy to staging |
 | Precise venue GPS / backend / real-time validation | **Not implemented yet** |
 | Installed/offline PWA, shared submissions, advertising | **Roadmap only** |
@@ -84,7 +84,9 @@ For research updates, use [the research playbook](docs/RESEARCH_PLAYBOOK.md) and
 - **Open a venue:** inspect the date, source links, notes and any conflicting visitor accounts.
 - **Read the scope:** a purported upstairs minimum is not automatically an off-site minimum, and neither is a room fee.
 - **Record what you learn:** use the observation form during a visit. It is private to that browser/device until exported.
-- **Export JSON:** use the export button to collect your local observations for later editorial review. Exporting does **not** upload or publish them.
+- **Review your notes:** open **My notes** to see dated observations across venues. Remove a mistaken note and use **Undo removal** to restore the latest removal during the session.
+- **Export JSON:** use either export button to back up the dataset and your local observations. Exporting does **not** upload or publish them.
+- **Restore a backup:** open **My notes → Restore backup**, choose an exported JSON file, review the counts, then choose **Import notes**. Existing notes are kept and duplicates are skipped. Only valid observations for known venue IDs are imported; venue data in the file never changes the published directory.
 
 A displayed **0** means someone **reported no compulsory minimum** in a particular context, not that the venue guarantees a zero minimum. A **?** means uncertain, conflicting, incomplete, or not comparable. A numbered badge is a **reported upstairs/ST count**, not an official quote.
 
@@ -115,7 +117,7 @@ The current entry point is `const DB = {...}` inside `index.html`:
 - `DB.metadata` contains snapshot dates, limitations, indicative street prices, and **group-level research leads**.
 - `DB.venues` is the array of venue records.
 - `GROUPS` defines labels and display colours.
-- Device-only field observations are held separately under the key `the-six-field-observations-v1`. They can temporarily override a displayed venue badge **for that device only**, not the published dataset.
+- Device-only field observations are held separately under the key `the-six-field-observations-v1`. The note with the latest **observation date** can override a displayed venue badge **for that device only**, not the published dataset. The last saved note wins ties; restoring an older backup preserves existing notes on the same date.
 
 Selected fields in a venue record:
 
@@ -131,6 +133,8 @@ Selected fields in a venue record:
 | `evidence[]` | Individual dated claims, including their separate scenarios |
 | `offsite_note`, `quirk` | Distinct off-site information and other cautiously worded observations |
 | `last_checked` | Reserved for **genuine verification**, not the date someone edited the file |
+
+**Backup limits:** restore accepts JSON files under 2 MB and at most 2,000 candidate notes. Invalid dates, future observations, notes longer than 500 characters, and unknown venue IDs are skipped and counted in the preview. If browser storage is unavailable, changes last only for the session; export before leaving. Undo is session-only and applies to the latest removal.
 
 Dates should use ISO `YYYY-MM-DD`; if observation time is recorded, use the **Asia/Bangkok** timezone and make the time type explicit. The source publication date, customer visit date, staff confirmation date and editorial review date are **not interchangeable**.
 
@@ -182,7 +186,7 @@ For a code or dataset change:
 
 ### Browser regression checks
 
-The site still runs without Node or dependencies. Optional development checks use Node.js and Playwright to exercise desktop (1440px) and phone (390px) layouts, search and filters, evidence cards, keyboard focus, local observations, JSON downloads, and damaged or unavailable browser storage.
+The site still runs without Node or dependencies. Optional development checks use Node.js and Playwright to exercise desktop (1440px), phone (390px), and narrow phone (320px) layouts, search and filters, evidence cards, keyboard focus, local observations, JSON downloads, backup preview/restore, removal/undo, duplicate protection, and damaged or unavailable browser storage.
 
 Install test tools outside the repository, then run from its root:
 
