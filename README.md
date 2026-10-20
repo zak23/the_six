@@ -37,9 +37,9 @@ The longer-term vision is an independently operated, installable progressive web
 | Venue details | Per-bar notes, selected reported minimums, sources and dated evidence timeline |
 | Research intelligence | **14 venues with 18 venue-specific evidence items** in the October 2026 snapshot |
 | Indicative street prices | Approximate historic ranges, clearly **not venue-specific quotes** |
-| Field observations | Add an observation for a venue; stored in your browser's \`localStorage\` |
+| Field observations | Add an observation for a venue; stored in your browser's `localStorage` |
 | Data export | Download an export of the embedded data and your device's observations as JSON |
-| GitHub → Vercel | Commits to \`main\` automatically deploy to staging |
+| GitHub → Vercel | Commits to `main` automatically deploy to staging |
 | Precise venue GPS / backend / real-time validation | **Not implemented yet** |
 | Installed/offline PWA, shared submissions, advertising | **Roadmap only** |
 
@@ -51,29 +51,29 @@ The longer-term vision is an independently operated, installable progressive web
 
 **https://the-six-staging.vercel.app**
 
-This is the demonstration and development environment. The project deliberately sends a \`noindex\` directive and serves a disallowing \`robots.txt\`. **No-indexing is not access control:** anyone who has the URL may be able to view the site. Do not use it to store secrets, private submissions, or identifying personal data.
+This is the demonstration and development environment. The project deliberately sends a `noindex` directive and serves a disallowing `robots.txt`. **No-indexing is not access control:** anyone who has the URL may be able to view the site. Do not use it to store secrets, private submissions, or identifying personal data.
 
 ### Run locally
 
 No account, framework, Node modules, build system, API key, or database required.
 
 1. Clone or download this repository.
-2. Open \`index.html\` in a modern browser.
+2. Open `index.html` in a modern browser.
 3. Alternatively, serve it locally from the repository root for a normal HTTP preview:
 
 ~~~sh
 python -m http.server 8080
 ~~~
 
-Then open \`http://localhost:8080\`.
+Then open `http://localhost:8080`.
 
-The site is intentionally self-contained: HTML, CSS, JavaScript, and the dataset live in the same \`index.html\`. A separate \`venues.json\`, \`compile.py\`, or build pipeline **does not currently exist**. Creating one is a planned refactor, not a prerequisite for running this release.
+The site is intentionally self-contained: HTML, CSS, JavaScript, and the dataset live in the same `index.html`. A separate `venues.json`, `compile.py`, or build pipeline **does not currently exist**. Creating one is a planned refactor, not a prerequisite for running this release.
 
 ### Edit from a phone
 
-The canonical source is [\`zak23/the_six\`](https://github.com/zak23/the_six), on the \`main\` branch. Changes can be made through GitHub or by an authorised coding agent. A push to \`main\` causes Vercel to rebuild and publish the staging URL automatically.
+The canonical source is [`zak23/the_six`](https://github.com/zak23/the_six), on the `main` branch. Changes can be made through GitHub or by an authorised coding agent. A push to `main` causes Vercel to rebuild and publish the staging URL automatically.
 
-For research updates, use [the research playbook](docs/RESEARCH_PLAYBOOK.md) and the instructions in [\`AGENTS.md\`](AGENTS.md) before editing the map. **A commit being deployed does not mean a claim was fact-checked.**
+For research updates, use [the research playbook](docs/RESEARCH_PLAYBOOK.md) and the instructions in [`AGENTS.md`](AGENTS.md) before editing the map. **A commit being deployed does not mean a claim was fact-checked.**
 
 ## How to use the guide
 
@@ -104,35 +104,35 @@ the_six/
         └── soi6-data-editor.agent.md  # Safely edits the site using reviewed evidence
 ~~~
 
-The files under \`.github/agents/\` provide roles for compatible agent tools. Root \`AGENTS.md\` is the default instruction file for agents that understand that convention.
+The files under `.github/agents/` provide roles for compatible agent tools. Root `AGENTS.md` is the default instruction file for agents that understand that convention.
 
 ## How the data is represented
 
-The current entry point is \`const DB = {...}\` inside \`index.html\`:
+The current entry point is `const DB = {...}` inside `index.html`:
 
-- \`DB.metadata\` contains snapshot dates, limitations, indicative street prices, and **group-level research leads**.
-- \`DB.venues\` is the array of venue records.
-- \`GROUPS\` defines labels and display colours.
-- Device-only field observations are held separately under the key \`the-six-field-observations-v1\`. They can temporarily override a displayed venue badge **for that device only**, not the published dataset.
+- `DB.metadata` contains snapshot dates, limitations, indicative street prices, and **group-level research leads**.
+- `DB.venues` is the array of venue records.
+- `GROUPS` defines labels and display colours.
+- Device-only field observations are held separately under the key `the-six-field-observations-v1`. They can temporarily override a displayed venue badge **for that device only**, not the published dataset.
 
 Selected fields in a venue record:
 
 | Field | Meaning |
 | --- | --- |
-| \`id\` | Stable slug. **Do not change lightly**, because local observations reference it. |
-| \`name\`, \`kind\` | Venue's name and type, or other business |
-| \`side\`, \`position\` | Schematic side and approximate ordering, **not coordinates** |
-| \`group\`, \`group_status\` | Reported operator affiliation and its qualification |
-| \`st_min\` | Specifically reported ST/upstairs drink count; **\`0\` = explicitly reported none**, \`null\` = unknown |
-| \`st_label\`, \`rule_status\` | Visible wording and whether the evidence is reported, conflicted, hinted, or unknown |
-| \`rule_date\`, \`rule_source\`, \`rule_note\` | Headline report's publication date, link and explanation |
-| \`evidence[]\` | Individual dated claims, including their separate scenarios |
-| \`offsite_note\`, \`quirk\` | Distinct off-site information and other cautiously worded observations |
-| \`last_checked\` | Reserved for **genuine verification**, not the date someone edited the file |
+| `id` | Stable slug. **Do not change lightly**, because local observations reference it. |
+| `name`, `kind` | Venue's name and type, or other business |
+| `side`, `position` | Schematic side and approximate ordering, **not coordinates** |
+| `group`, `group_status` | Reported operator affiliation and its qualification |
+| `st_min` | Specifically reported ST/upstairs drink count; **`0` = explicitly reported none**, `null` = unknown |
+| `st_label`, `rule_status` | Visible wording and whether the evidence is reported, conflicted, hinted, or unknown |
+| `rule_date`, `rule_source`, `rule_note` | Headline report's publication date, link and explanation |
+| `evidence[]` | Individual dated claims, including their separate scenarios |
+| `offsite_note`, `quirk` | Distinct off-site information and other cautiously worded observations |
+| `last_checked` | Reserved for **genuine verification**, not the date someone edited the file |
 
-Dates should use ISO \`YYYY-MM-DD\`; if observation time is recorded, use the **Asia/Bangkok** timezone and make the time type explicit. The source publication date, customer visit date, staff confirmation date and editorial review date are **not interchangeable**.
+Dates should use ISO `YYYY-MM-DD`; if observation time is recorded, use the **Asia/Bangkok** timezone and make the time type explicit. The source publication date, customer visit date, staff confirmation date and editorial review date are **not interchangeable**.
 
-Our evidence and future data-model conventions are in [\`docs/RESEARCH_PLAYBOOK.md\`](docs/RESEARCH_PLAYBOOK.md). This is the authoritative guide for source discovery and uncertainty labels.
+Our evidence and future data-model conventions are in [`docs/RESEARCH_PLAYBOOK.md`](docs/RESEARCH_PLAYBOOK.md). This is the authoritative guide for source discovery and uncertainty labels.
 
 ## Research and corrections
 
@@ -151,7 +151,7 @@ The complete source list, targeted search queries, confidence standards, follow-
 
 ### Correcting a record
 
-1. Identify the **exact venue** using the stable \`id\`; match spelling, side, location and aliases.
+1. Identify the **exact venue** using the stable `id`; match spelling, side, location and aliases.
 2. Identify the **exact claim**: name, closure, affiliation, hours, drink minimum, room fee, off-site fee or other rule.
 3. Find a dated, linkable source, or an authorised in-person observation with a recorded date and non-identifying context.
 4. Record any contradiction **without deleting the previous evidence trail**.
@@ -165,18 +165,18 @@ For a mistaken listing or changed rule, we want an operator correction path and 
 The stack is intentionally boring, fast, and easy to host:
 
 - **Frontend:** plain HTML, CSS and modern vanilla JavaScript.
-- **Data:** embedded \`DB\` object with 100 seeded locations.
-- **Persistence:** \`localStorage\` only for individual field notes; no shared backend or admin login.
-- **Hosting:** Vercel, linked to GitHub \`main\`.
+- **Data:** embedded `DB` object with 100 seeded locations.
+- **Persistence:** `localStorage` only for individual field notes; no shared backend or admin login.
+- **Hosting:** Vercel, linked to GitHub `main`.
 - **Build command:** none.
 
 For a code or dataset change:
 
-1. Read \`AGENTS.md\` and the research playbook.
-2. Inspect the current \`index.html\` and \`research-notes.md\` rather than assuming a future architecture is already in place.
+1. Read `AGENTS.md` and the research playbook.
+2. Inspect the current `index.html` and `research-notes.md` rather than assuming a future architecture is already in place.
 3. Make the smallest safe change; retain venue IDs, evidence links, and cautionary language.
 4. Check JS syntax and JSON validity where applicable, then manually smoke-test mobile and desktop.
-5. Push or merge to \`main\` and confirm Vercel deployment status. A build passing does not substitute for UX or factual checks.
+5. Push or merge to `main` and confirm Vercel deployment status. A build passing does not substitute for UX or factual checks.
 
 ### Manual QA checklist
 
@@ -187,14 +187,14 @@ For a code or dataset change:
 - Evidence links open the intended source; dates describe the correct type of date.
 - Local observations save, can be exported, and do not alter the public source dataset.
 - No individual worker/customer identifiers, photographs, private links, or unsourced defamatory claims have entered the repository.
-- The staging site still has \`noindex\` directives; the page remains useable without a build or external API.
+- The staging site still has `noindex` directives; the page remains useable without a build or external API.
 
 ## Roadmap
 
 | Phase | Goal |
 | --- | --- |
 | **v0.2.1: research hygiene** | Audit the entire street in person; verify open/closed and renamed venues; record verified frontage order; reconcile operator group affiliations; maintain reviewed evidence dates |
-| **v0.3: data foundation** | Move \`DB\` to version-controlled structured data, introduce validated claim types and source records, tests, migrations and editor tools |
+| **v0.3: data foundation** | Move `DB` to version-controlled structured data, introduce validated claim types and source records, tests, migrations and editor tools |
 | **v0.4: real map + PWA** | Proper geolocation (licensed or independently captured), stable venue IDs, offline cache, install prompt, accessibility and a Thai-friendly UI |
 | **v0.5: community intelligence** | Moderated submissions, evidence review, operator correction channel, abuse/spam controls and a public changelog |
 | **v1.0: independent publication** | Advertising clearly separated from editorial data, privacy-conscious analytics, content policy review and sustainable maintenance |
