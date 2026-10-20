@@ -21,13 +21,13 @@ A mobile-first, zero-framework **prototype**, not a live, verified directory. Th
 
 ## Data editing
 
-Edit `venues.json` to add, update or move venues or change a reported rule. Then run:
+This version is a **single-file static prototype**: edit the embedded venue data in `index.html` and commit to `main`. There is no build step or server-side database yet. A structured `venues.json` dataset and a compilation script are planned but are **not currently included** in this repository.
 
-```sh
-python compile.py
-```
+## Live preview
 
-That regenerates `index.html` with fresh embedded data. `build_data.py` is the one-time seed script and may overwrite editorial changes. Avoid running it once you have curated the dataset.
+- Staging site: https://the-six-staging.vercel.app
+- GitHub repository: https://github.com/zak23/the_six
+- Vercel is configured to track the GitHub repository; confirm that this commit creates a new deployment before relying on automatic updates.
 
 Important per-venue fields:
 
