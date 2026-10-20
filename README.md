@@ -71,6 +71,8 @@ The site is intentionally self-contained: HTML, CSS, JavaScript, and the dataset
 
 ### Edit from a phone
 
+**Working from multiple devices or with multiple agents?** Start at the [shared work log](docs/work-log/README.md). Claim a task there before editing, check who owns each file, and leave progress and handoff notes. Each task has its own file so contributors do not have to edit one shared log entry.
+
 The canonical source is [`zak23/the_six`](https://github.com/zak23/the_six), on the `main` branch. Changes can be made through GitHub or by an authorised coding agent. A push to `main` causes Vercel to rebuild and publish the staging URL automatically.
 
 For research updates, use [the research playbook](docs/RESEARCH_PLAYBOOK.md) and the instructions in [`AGENTS.md`](AGENTS.md) before editing the map. **A commit being deployed does not mean a claim was fact-checked.**
@@ -172,11 +174,25 @@ The stack is intentionally boring, fast, and easy to host:
 
 For a code or dataset change:
 
-1. Read `AGENTS.md` and the research playbook.
+1. Read `AGENTS.md`, the research playbook and the [shared work log](docs/work-log/README.md); publish a task claim and check for overlapping work before editing.
 2. Inspect the current `index.html` and `research-notes.md` rather than assuming a future architecture is already in place.
 3. Make the smallest safe change; retain venue IDs, evidence links, and cautionary language.
 4. Check JS syntax and JSON validity where applicable, then manually smoke-test mobile and desktop.
 5. Push or merge to `main` and confirm Vercel deployment status. A build passing does not substitute for UX or factual checks.
+
+### Browser regression checks
+
+The site still runs without Node or dependencies. Optional development checks use Node.js and Playwright to exercise desktop (1440px) and phone (390px) layouts, search and filters, evidence cards, keyboard focus, local observations, JSON downloads, and damaged or unavailable browser storage.
+
+Install test tools outside the repository, then run from its root:
+
+~~~sh
+npm install --prefix /tmp/the-six-qa playwright@1.48.2
+/tmp/the-six-qa/node_modules/.bin/playwright install chromium
+NODE_PATH=/tmp/the-six-qa/node_modules node tests/smoke.cjs
+~~~
+
+Set `BASE_URL=https://the-six-staging.vercel.app` to run the same checks against the deployed site. Test notes stay in disposable browser contexts and are never published.
 
 ### Manual QA checklist
 

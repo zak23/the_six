@@ -21,6 +21,12 @@ These instructions apply to all agents operating on the repository. Agent-specif
 
 **The running source of truth is the checked-in code.** This release is a single static `index.html` containing `const DB = {...}`, its CSS, and JavaScript. There is **no `venues.json`, `compile.py`, package.json, backend, server-side submissions or proper PWA yet**. Do not execute a nonexistent build script, tell users it was run, or claim a feature exists just because it appears in the roadmap.
 
+### Coordinate before editing
+
+Read [`docs/work-log/README.md`](docs/work-log/README.md) and active task records in `docs/work-log/` before starting work. Every contributor/agent must record an owner/session label, scope, claimed files, base commit, status and handoff notes in a separate task file. Publish the claim to shared GitHub `main` before editing the claimed files; a local or branch-only note is not visible to everyone. Recheck shared claims after publishing. Claims are advisory, not automatic locks.
+
+Do not edit files claimed by another active task. In particular, treat all of `index.html` as one editing slot, even for different venues. Work on a non-overlapping task or explicitly agree a handoff. Preserve unfamiliar uncommitted changes; never reset, overwrite or force-push someone else's work. Record progress, checks, commit/deployment results and remaining work before handing off. Research-only agents that cannot commit must have a human/editor publish their claim and report.
+
 ## 1. Non-negotiable product rules
 
 - **Independent:** never imply that THE SIX. is run by Nightwish, Baba, Better, Panda or any individual venue. Do not import venue branding or protected media without permission.
