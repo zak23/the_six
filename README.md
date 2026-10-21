@@ -30,7 +30,7 @@ The longer-term vision is an independently operated, installable progressive web
 
 | Feature | Current state |
 | --- | --- |
-| Two-sided Soi 6 street diagram | Working, **approximate ordering**, Beach Road at the top and Second Road at the bottom |
+| Interactive Soi 6 street map | Drag/scroll along two sides, zoom, jump via the overview, and open floating venue cards; **schematic order, not GPS** |
 | Venue catalogue | **100 named locations** in the original snapshot: 98 bars and two other businesses |
 | Group colours | Nightwish, Baba, Better, Panda, and **Other / unknown** |
 | Search and filters | Name search, group filter, street/list views, reported-minimum filters |
@@ -79,7 +79,9 @@ For research updates, use [the research playbook](docs/RESEARCH_PLAYBOOK.md) and
 
 ## How to use the guide
 
-- **Browse the schematic:** bars appear on their reported street side, with group colours.
+- **Explore the map:** drag with a mouse or swipe/scroll along Soi 6. Beach Road is at the left end and Second Road at the right. Use +/− to zoom, Reset to return to the start, or the overview and slider to jump along the street. Coloured blocks show venues in their reported side/order; their shapes and spacing are illustrative.
+- **Open a venue:** tap its map block for a floating evidence card. The List button offers the searchable directory.
+- **Read the research:** expand the Research desk below the map for group reports and indicative historic prices.
 - **Search or filter:** find an individual bar or compare one operator group.
 - **Open a venue:** inspect the date, source links, notes and any conflicting visitor accounts.
 - **Read the scope:** a purported upstairs minimum is not automatically an off-site minimum, and neither is a room fee.
@@ -201,7 +203,7 @@ Set `BASE_URL=https://the-six-staging.vercel.app` to run the same checks against
 ### Manual QA checklist
 
 - Street and list views load; search and group filters behave on a narrow phone.
-- Both sides of the street are in the expected order.
+- Both sides of the street are in the expected order; map zoom, drag, overview navigation and floating venue cards work.
 - Venue counts and bar/group labels are sensible; unknown is not displayed as independent.
 - **Upstairs counts, reported zeros, hints, conflicting reports and off-site quotes remain distinct.**
 - Evidence links open the intended source; dates describe the correct type of date.
